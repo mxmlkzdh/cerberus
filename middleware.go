@@ -13,7 +13,7 @@ import "net/http"
 //   - If the request exceeds the rate limit, an HTTP 429 (Too Many Requests) response is returned.
 //   - If the rate limiter encounters an error, an HTTP 500 (Internal Server Error) response is returned.
 //
-// Example usage: http.Handle("/resource", cerberus.Middleware(myRateLimiter, myHandler))
+// Example usage: http.Handle("/resource", Middleware(myRateLimiter, myHandler))
 func Middleware(rateLimiter RateLimiter, next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		isAllowed, err := rateLimiter.IsAllowed(r)

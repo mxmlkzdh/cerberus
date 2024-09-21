@@ -13,5 +13,5 @@ type RateLimiter interface {
 	// is allowed, false otherwise. An error may be returned if
 	// there are issues with the underlying rate limiting logic,
 	// such as connectivity to a backend service, a cache server, or configuration errors.
-	IsAllowed(req *http.Request) (bool, error)
+	IsAllowed(*http.Request) (bool, error)
 }

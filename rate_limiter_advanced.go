@@ -24,7 +24,7 @@ type AdvancedRateLimiter interface {
 	//
 	// The returned RateLimitData can be used to enrich the response to clients,
 	// providing more visibility into the rate-limiting policy (e.g., setting
-	// the X-Retry-After header).
+	// the X-RateLimit-Retry-After header).
 	GetRateLimitData(*http.Request) RateLimitData
 }
 
@@ -35,16 +35,18 @@ type AdvancedRateLimiter interface {
 // This struct can be used to inform clients about their remaining quota,
 // the total request limit, and how long they should wait before retrying a request.
 type RateLimitData struct {
-	// Remaining indicates how many requests the client can still make
-	// within the current rate limit window.
-	Remaining int
-
 	// Limit is the total number of requests allowed within the current
-	// rate limit window.
+	// rate limit window. It is typically used to set the X-RateLimit-Limit
+	// header in the HTTP response when rate limiting is enforced.
 	Limit int
 
+	// Remaining indicates how many requests the client can still make
+	// within the current rate limit window. It is typically used to set the X-RateLimit-Remaining
+	// header in the HTTP response when rate limiting is enforced.
+	Remaining int
+
 	// RetryAfter specifies the amount of time a client should wait before
-	// making another request. It is typically used to set the X-Retry-After
+	// making another request. It is typically used to set the X-RateLimit-Retry-After
 	// header in the HTTP response when rate limiting is enforced.
 	RetryAfter time.Duration
 }

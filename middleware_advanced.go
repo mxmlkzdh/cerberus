@@ -39,7 +39,6 @@ func AdvancedMiddleware(rateLimiter AdvancedRateLimiter, next http.Handler) http
 		if !isAllowed {
 			w.Header().Set("X-RateLimit-Retry-After", fmt.Sprintf("%d", data.RetryAfter.Milliseconds()))
 			w.WriteHeader(http.StatusTooManyRequests)
-			w.WriteHeader(http.StatusTooManyRequests)
 			return
 		}
 		w.Header().Set("X-RateLimit-Limit", fmt.Sprintf("%d", data.Limit))

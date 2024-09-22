@@ -7,6 +7,7 @@ import (
 	"testing"
 )
 
+// Mock implementation of RateLimiter
 type MockRateLimiter struct {
 	IsAllowedFunction func(*http.Request) (bool, error)
 }

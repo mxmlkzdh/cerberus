@@ -10,12 +10,12 @@ import (
 
 // Mock implementation of AdvancedRateLimiter
 type MockAdvancedRateLimiter struct {
-	IsAllowedFunction    func(*http.Request) (bool, error)
+	IsAllowedFunc        func(*http.Request) (bool, error)
 	GetRateLimitDataFunc func(*http.Request) RateLimitData
 }
 
 func (m *MockAdvancedRateLimiter) IsAllowed(r *http.Request) (bool, error) {
-	return m.IsAllowedFunction(r)
+	return m.IsAllowedFunc(r)
 }
 
 func (m *MockAdvancedRateLimiter) GetRateLimitData(r *http.Request) RateLimitData {
@@ -25,7 +25,7 @@ func (m *MockAdvancedRateLimiter) GetRateLimitData(r *http.Request) RateLimitDat
 // Test allowing requests within the limit
 func TestAdvancedMiddlewareAllowsWithinLimit(t *testing.T) {
 	mockLimiter := &MockAdvancedRateLimiter{
-		IsAllowedFunction: func(r *http.Request) (bool, error) {
+		IsAllowedFunc: func(r *http.Request) (bool, error) {
 			return true, nil
 		},
 		GetRateLimitDataFunc: func(r *http.Request) RateLimitData {
@@ -53,7 +53,7 @@ func TestAdvancedMiddlewareAllowsWithinLimit(t *testing.T) {
 // Test blocking requests exceeding the limit
 func TestAdvancedMiddlewareBlocksExceededLimit(t *testing.T) {
 	mockLimiter := &MockAdvancedRateLimiter{
-		IsAllowedFunction: func(r *http.Request) (bool, error) {
+		IsAllowedFunc: func(r *http.Request) (bool, error) {
 			return false, nil
 		},
 		GetRateLimitDataFunc: func(r *http.Request) RateLimitData {
@@ -84,7 +84,7 @@ func TestAdvancedMiddlewareBlocksExceededLimit(t *testing.T) {
 // Test handling errors in the rate limiter
 func TestAdvancedMiddlewareHandlesError(t *testing.T) {
 	mockLimiter := &MockAdvancedRateLimiter{
-		IsAllowedFunction: func(r *http.Request) (bool, error) {
+		IsAllowedFunc: func(r *http.Request) (bool, error) {
 			return false, fmt.Errorf("rate limiter error")
 		},
 		GetRateLimitDataFunc: func(r *http.Request) RateLimitData {
@@ -108,7 +108,7 @@ func TestAdvancedMiddlewareHandlesError(t *testing.T) {
 // Test adding rate limit headers for allowed requests
 func TestAdvancedMiddlewareAddsRateLimitHeaders(t *testing.T) {
 	mockLimiter := &MockAdvancedRateLimiter{
-		IsAllowedFunction: func(r *http.Request) (bool, error) {
+		IsAllowedFunc: func(r *http.Request) (bool, error) {
 			return true, nil
 		},
 		GetRateLimitDataFunc: func(r *http.Request) RateLimitData {

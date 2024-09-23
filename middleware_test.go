@@ -9,17 +9,17 @@ import (
 
 // Mock implementation of RateLimiter
 type MockRateLimiter struct {
-	IsAllowedFunction func(*http.Request) (bool, error)
+	IsAllowedFunc func(*http.Request) (bool, error)
 }
 
 func (rl *MockRateLimiter) IsAllowed(r *http.Request) (bool, error) {
-	return rl.IsAllowedFunction(r)
+	return rl.IsAllowedFunc(r)
 }
 
 // Test middleware allows requests within the limit
 func TestMiddlewareAllowsWithinLimit(t *testing.T) {
 	mockLimiter := &MockRateLimiter{
-		IsAllowedFunction: func(r *http.Request) (bool, error) {
+		IsAllowedFunc: func(r *http.Request) (bool, error) {
 			return true, nil
 		},
 	}
@@ -40,7 +40,7 @@ func TestMiddlewareAllowsWithinLimit(t *testing.T) {
 // Test middleware blocks requests exceeding the limit
 func TestMiddlewareBlocksExceededLimit(t *testing.T) {
 	mockLimiter := &MockRateLimiter{
-		IsAllowedFunction: func(r *http.Request) (bool, error) {
+		IsAllowedFunc: func(r *http.Request) (bool, error) {
 			return false, nil
 		},
 	}
@@ -61,7 +61,7 @@ func TestMiddlewareBlocksExceededLimit(t *testing.T) {
 // Test middleware returns an HTTP 500 on error
 func TestMiddlewareHandlesError(t *testing.T) {
 	mockLimiter := &MockRateLimiter{
-		IsAllowedFunction: func(r *http.Request) (bool, error) {
+		IsAllowedFunc: func(r *http.Request) (bool, error) {
 			return false, fmt.Errorf("rate limiter error")
 		},
 	}
